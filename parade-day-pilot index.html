@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parade Day Pilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, confident product demo — an assistant that already did the work.
+   IDEA: a transit map of your day — one thick line with stops, bending around closures.
+   PICTURE: Manhattan schematic (or live Google map) with parade route, closure zones by time, your legs.
+   COLOUR and TYPE: white ground, closure red, subway blue, taxi amber, walk green, ink black; Figtree.
+   LAYOUT: plan timeline left, map right; agent log and data review below. */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0e1116);--ink:light-dark(#111418,#eef1f5);--mute:light-dark(#5a6470,#9aa6b2);--line:light-dark(#e3e7ec,#262c35);--panel:light-dark(#f5f7f9,#161b22);--red:#e6261f;--blue:#0a5cff;--amber:#ffb400;--green:#00a05a;--park:light-dark(#d8eed9,#1b3323);--land:light-dark(#f1f2ee,#1a1f27)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,3vw,40px) max(4vw,16px)}
+h1{font-size:clamp(30px,4vw,46px);line-height:1.05;margin:0 0 8px;font-weight:800;text-wrap:balance}
+h2{font-size:22px;margin:0 0 12px;font-weight:800}
+.sub{color:var(--mute);max-width:70ch;margin:0}
+.top{border-bottom:6px solid var(--red);display:grid;gap:16px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input,button{font:inherit;font-size:16px;min-height:44px;border-radius:10px}
+input{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:0 12px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+button{border:0;padding:0 16px;font-weight:600;cursor:pointer;background:var(--ink);color:var(--bg)}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button.warn{background:var(--red);color:#fff}
+.badge{font-size:13px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--panel);border:1px solid var(--line)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:start}
+@media(max-width:900px){.main{grid-template-columns:minmax(0,1fr)}}
+.stats{display:flex;flex-wrap:wrap;gap:24px;margin:0 0 18px}
+.stats b{display:block;font-size:30px;line-height:1.1}.stats span{font-size:13px;color:var(--mute)}
+ol.day{list-style:none;margin:0;padding:0;position:relative}
+ol.day::before{content:"";position:absolute;left:88px;top:8px;bottom:8px;width:6px;border-radius:3px;background:var(--ink)}
+.stop{display:grid;grid-template-columns:72px minmax(0,1fr);gap:34px;padding:0 0 22px;position:relative}
+.stop::after{content:"";position:absolute;left:82px;top:6px;width:18px;height:18px;border-radius:50%;background:var(--bg);border:5px solid var(--ink)}
+.stop .t{font-weight:800;font-size:17px;text-align:right;white-space:nowrap;padding-top:2px}
+.stop input[type=time]{width:100%;min-height:36px;font-size:14px;padding:0 4px;margin-top:6px}
+.ttl{font-weight:800;font-size:18px}.place{color:var(--mute);font-size:14px}
+.leg{margin-top:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.leave{font-size:20px;font-weight:800;white-space:nowrap}
+.mode{display:inline-block;font-size:13px;font-weight:700;color:#fff;border-radius:6px;padding:2px 8px;margin-right:6px}
+.m-TRANSIT{background:var(--blue)}.m-DRIVING{background:var(--amber);color:#111}.m-WALKING{background:var(--green)}
+.note{font-size:14px;margin:6px 0 0}.note.bad{color:var(--red);font-weight:600}
+.alts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.alt{font-size:13px;border:1px solid var(--line);border-radius:8px;padding:3px 8px;color:var(--mute)}
+.alt.x{text-decoration:line-through}
+.home{padding-bottom:18px}
+.mapwrap{position:sticky;top:12px}
+@media(max-width:900px){.mapwrap{position:static}}
+#map{height:min(70vh,620px);min-height:380px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--land);position:relative}
+#map svg{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--mute);margin-top:8px}
+.legend i{display:inline-block;width:14px;height:6px;border-radius:3px;margin-right:5px;vertical-align:middle}
+.slider{display:flex;gap:10px;align-items:center;margin-top:8px;font-size:14px}
+.slider input{flex:1;min-height:30px;padding:0}
+.alert{border:2px solid var(--red);border-radius:14px;padding:14px 16px;margin:0 0 18px;display:none}
+.alert.on{display:block}.alert h3{margin:0 0 6px;font-size:18px}
+.draft{background:var(--panel);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:28px}
+ul.log{margin:0;padding-left:18px;font-size:14px}ul.log li{margin-bottom:4px}
+.review li{margin-bottom:6px;font-size:15px}
+.small{font-size:13px;color:var(--mute)}
+.spin{opacity:.5;pointer-events:none}
+@media(prefers-reduced-motion:no-preference){.leg{transition:background .4s}.leg.flash{background:light-dark(#ffe9e8,#3a1a1a)}}
+</style>
+</head>
+<body>
+<header class="band top">
+  <div>
+    <h1>Parade Day Pilot: your Thanksgiving, re-planned around the 100th parade</h1>
+    <p class="sub">An assistant that knows your plans for Thu, Nov 26, watches the parade closures, and tells you when to leave and how to go, before you have to ask.</p>
+  </div>
+  <div class="bar">
+    <input id="key" type="password" placeholder="Paste Google Maps API key (optional)" autocomplete="off" style="flex:1 1 260px;max-width:420px" aria-label="Google Maps API key">
+    <button id="golive">Use live Google Maps</button>
+    <span class="badge" id="modeBadge">Demo mode: estimated times</span>
+  </div>
+  <p class="small" id="keyMsg">The key stays in this browser tab only and is never saved. Live mode needs Maps JavaScript API + Routes API turned on for the key.</p>
+</header>
+
+<main class="band main">
+  <section aria-labelledby="dayH">
+    <div class="alert" id="alert" role="status"></div>
+    <div class="stats" id="stats"></div>
+    <div class="bar" style="margin-bottom:18px">
+      <button class="warn" id="disrupt">Simulate disruption: parade runs late</button>
+      <button class="ghost" id="replan">Re-plan my day</button>
+    </div>
+    <h2 id="dayH">Maya's Thursday</h2>
+    <ol class="day" id="day"></ol>
+    <p class="small">Sample person and plans. Change any time to see the plan update.</p>
+  </section>
+  <section class="mapwrap" aria-label="Map">
+    <div id="map"></div>
+    <div class="slider"><label for="clock">Map time</label><input id="clock" type="range" min="360" max="1080" step="15" value="510"><b id="clockOut" style="white-space:nowrap">8:30 AM</b></div>
+    <div class="legend"><span><i style="background:var(--red)"></i>Closed now</span><span><i style="background:#9aa6b2"></i>Closed later / open now</span><span><i style="background:var(--red);height:3px"></i>Parade route (dashed)</span><span><i style="background:var(--blue)"></i>Subway</span><span><i style="background:var(--amber)"></i>Taxi</span><span><i style="background:var(--green)"></i>Walk</span></div>
+  </section>
+</main>
+
+<section class="band cols" style="border-top:1px solid var(--line)">
+  <div><h2>What the agent did</h2><ul class="log" id="log"></ul></div>
+  <div class="review"><h2>Data review: what to trust</h2>
+    <ul>
+      <li><b>Confirmed for 2026:</b> Thu Nov 26, 8:30 AM to about noon, same 2.5-mile route: Central Park West at 77th St → Central Park South → 6th Ave → 34th St at Macy's. About 3.5M spectators expected.</li>
+      <li><b>Not yet confirmed:</b> exact closure times. The app uses the city's 2025 times (most roads reopen about 3 PM; 7th Ave near Herald Sq until 8 PM). NYPD can change them on the day.</li>
+      <li><b>Gap in public data:</b> no official list of where people on foot can cross the route. The app assumes no crossing while the parade is moving.</li>
+      <li><b>Map shapes are approximate</b>, drawn by hand from street corners.</li>
+      <li><b>Google Routes has no "avoid this area" option.</b> The agent asks for several routes, checks each against the closure zones, and adds a detour stop if needed. Subway trips only have their walking parts checked.</li>
+    </ul>
+    <p class="small">Sources: Fox5 NY 2026 closures map, Afar 2026 parade guide, NYC 2025 street-closure notice, MTA Thanksgiving 2025 service notice, Google Maps Platform docs.</p>
+  </div>
+</section>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=m=>{m=Math.round(m);let h=Math.floor(m/60),mm=m%60,ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+String(mm).padStart(2,'0')+' '+ap};
+const toTime=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const COS=Math.cos(40.76*Math.PI/180);
+const hav=(a,b)=>{const R=6371,dl=(b[0]-a[0])*Math.PI/180,dn=(b[1]-a[1])*Math.PI/180;const x=Math.sin(dl/2)**2+Math.cos(a[0]*Math.PI/180)*Math.cos(b[0]*Math.PI/180)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))};
+const strip=(p,q,w)=>{const dx=(q[1]-p[1])*COS,dy=q[0]-p[0],L=Math.hypot(dx,dy),nx=-dy/L*w,ny=dx/L*w;const o=[ny,nx/COS];return[[p[0]+o[0],p[1]+o[1]],[q[0]+o[0],q[1]+o[1]],[q[0]-o[0],q[1]-o[1]],[p[0]-o[0],p[1]-o[1]]]};
+
+const ROUTE=[[40.7807,-73.9734],[40.7681,-73.9819],[40.7652,-73.9765],[40.7497,-73.9877],[40.7506,-73.9905]];
+const ZONES=[
+ {id:'cpw',name:'Central Park West, 60th–85th St',poly:[[40.7841,-73.9690],[40.7672,-73.9806],[40.7690,-73.9850],[40.7864,-73.9747]],car:[0,900],walk:[480,750],via:[40.7837,-73.9658],detour:'goes north around the closure via the 86th St Transverse'},
+ {id:'cps',name:'Central Park South (59th St)',poly:strip([40.7681,-73.9819],[40.7644,-73.9730],0.0006),car:[60,1020],walk:[480,750],via:[40.7625,-73.9740],detour:'stays south on 57th St'},
+ {id:'sixth',name:'6th Ave, 59th–23rd St',poly:strip([40.7652,-73.9765],[40.7429,-73.9928],0.0007),car:[120,900],walk:[510,750],via:[40.7395,-73.9950],detour:'crosses 6th Ave south of 23rd St'},
+ {id:'herald',name:'7th Ave near Herald Sq, 32nd–42nd St',poly:strip([40.7558,-73.9867],[40.7493,-73.9914],0.0007),car:[120,1200],walk:[540,780],via:[40.7468,-73.9935],detour:'crosses 7th Ave at 29th St'},
+ {id:'w34',name:'34th St, 6th–8th Ave',poly:strip([40.7497,-73.9877],[40.7524,-73.9937],0.0006),car:[0,1020],walk:[540,780],via:[40.7468,-73.9935],detour:'crosses at 29th St'}
+];
+const HOME={title:'Leave home',place:'W 81st St & Amsterdam Ave',p:[40.7840,-73.9780]};
+const PLANS=[
+ {t:540,title:'Volunteer shift',place:'Food pantry, Lexington Ave & E 51st St',p:[40.7569,-73.9715]},
+ {t:750,title:'Pick up pies',place:'Bakery, 9th Ave & W 44th St',p:[40.7603,-73.9919]},
+ {t:960,title:'Thanksgiving dinner',place:"Sam's apartment, 3rd Ave & E 20th St",p:[40.7368,-73.9835],host:'Sam'}
+];
+const MODE={TRANSIT:'Subway',DRIVING:'Taxi',WALKING:'Walk'};
+const COL={TRANSIT:'#0a5cff',DRIVING:'#ffb400',WALKING:'#00a05a'};
+let disrupt=false,live=false,gm=null,gmap=null,gshapes=[],results=[],prev=null,log=[];
+
+const win=(z,mode)=>{const w=mode==='WALKING'?z.walk:z.car;return disrupt?[w[0],w[1]+(mode==='WALKING'?60:90)]:w};
+const inPoly=(pt,poly)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[a,b]=[poly[i],poly[j]];if((a[1]>pt[1])!==(b[1]>pt[1])&&pt[0]<(b[0]-a[0])*(pt[1]-a[1])/(b[1]-a[1])+a[0])c=!c}return c};
+const crosses=(path,poly)=>{for(let i=1;i<path.length;i++){const a=path[i-1],b=path[i],n=Math.max(1,Math.ceil(hav(a,b)*1000/25));for(let k=0;k<=n;k++){const f=k/n;if(inPoly([a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f],poly))return true}}return false};
+const nearRoute=p=>ROUTE.some((r,i)=>i&&hav(p,[(r[0]+ROUTE[i-1][0])/2,(r[1]+ROUTE[i-1][1])/2])<1.2);
+
+function evalOpt(o,arrive,from,to){
+  const crowd=o.mode==='TRANSIT'&&(nearRoute(from.p)||nearRoute(to.p))&&arrive>=420&&arrive<=(disrupt?870:810)?8:0;
+  o.crowd=crowd;o.depart=arrive-10-crowd-o.mins;
+  o.hits=ZONES.filter(z=>{const[s,e]=win(z,o.mode);return o.depart<e&&arrive>s&&o.check.some(seg=>crosses(seg,z.poly))});
+  return o;
+}
+function demoOpt(mode,from,to,arrive){
+  const d=hav(from.p,to.p)*1.35;
+  const mins=mode==='DRIVING'?d/13*60+5:mode==='TRANSIT'?11+d/24*60:d/4.8*60;
+  let o=evalOpt({mode,mins:Math.round(mins),path:[from.p,to.p],check:mode==='TRANSIT'?[]:[[from.p,to.p]],notes:[],est:true},arrive,from,to);
+  if(mode==='TRANSIT')o.notes.push('Runs underground, so it never has to cross the parade. Holiday (Sunday) schedule.');
+  if(o.hits.length&&mode!=='TRANSIT'){const z=o.hits[0];o=evalOpt({...o,mins:o.mins+(mode==='DRIVING'?15:18),path:[from.p,z.via,to.p],check:[],rerouted:z},arrive,from,to);o.notes.push('Direct way is blocked by '+z.name+'. Detour '+z.detour+'.')}
+  return o;
+}
+const ll=p=>typeof p.lat==='function'?[p.lat(),p.lng()]:[p.lat,p.lng];
+async function liveOpt(mode,from,to,arrive,via){
+  const{Route}=await gm.importLibrary('routes');
+  const req={origin:{lat:from.p[0],lng:from.p[1]},destination:{lat:to.p[0],lng:to.p[1]},travelMode:mode,fields:['*']};
+  if(via)req.intermediates=[{lat:via.via[0],lng:via.via[1]}];else req.computeAlternativeRoutes=true;
+  if(mode!=='WALKING')req.departureTime=new Date('2026-11-26T'+toTime(Math.max(0,arrive-45))+':00-05:00');
+  if(mode==='DRIVING')req.routingPreference='TRAFFIC_AWARE';
+  const{routes}=await Route.computeRoutes(req);
+  if(!routes||!routes.length)return null;
+  const opts=routes.map(r=>{
+    const path=(r.path||[]).map(ll),steps=(r.legs||[]).flatMap(l=>l.steps||[]);
+    const check=mode==='TRANSIT'?steps.filter(s=>String(s.travelMode).toUpperCase()==='WALKING').map(s=>(s.path||[]).map(ll)):[path];
+    const lines=steps.map(s=>s.transitDetails).filter(Boolean).map(t=>{const l=t.transitLine||{};return(l.shortName||l.name||'Transit')+(t.departureStop?.name?' from '+t.departureStop.name:'')+(t.arrivalStop?.name?' to '+t.arrivalStop.name:'')});
+    const o=evalOpt({mode,mins:Math.round((r.durationMillis||0)/60000),path,check,notes:[]},arrive,from,to);
+    if(lines.length)o.notes.push(lines.join(' → ')+'.');
+    if(mode==='TRANSIT')o.notes.push('Walking parts checked against closures. Holiday (Sunday) schedule.');
+    return o});
+  let best=opts.find(o=>!o.hits.length);
+  if(best){if(opts[0].hits.length)best.notes.push('Google\'s first route crossed '+opts[0].hits[0].name+'; picked a clear alternative.');return best}
+  if(mode!=='TRANSIT'&&!via){try{const d=await liveOpt(mode,from,to,arrive,opts[0].hits[0]);if(d&&!d.hits.length){d.rerouted=opts[0].hits[0];d.notes.push('Every Google route crossed '+opts[0].hits[0].name+'. Added a detour stop: '+opts[0].hits[0].detour+'.');return d}}catch(e){}}
+  return opts[0];
+}
+async function planLeg(from,to,arrive){
+  const modes=['TRANSIT','DRIVING'];if(hav(from.p,to.p)<3.3)modes.push('WALKING');
+  const opts=[];
+  for(const m of modes){let o=null;
+    if(live){try{o=await liveOpt(m,from,to,arrive)}catch(e){log.push('Google could not route '+MODE[m]+' for '+to.title+' ('+(e.message||e)+'). Used an estimate instead.')}}
+    if(!o)o=demoOpt(m,from,to,arrive);opts.push(o)}
+  const ok=opts.filter(o=>!o.hits.length).sort((a,b)=>(a.mins+a.crowd)-(b.mins+b.crowd));
+  const best=ok[0]||opts.sort((a,b)=>a.mins-b.mins)[0];
+  log.push(to.title+': compared '+opts.map(o=>MODE[o.mode]+' '+o.mins+' min'+(o.hits.length?' (blocked)':o.rerouted?' (detour)':'')).join(', ')+' → chose '+MODE[best.mode]+', leave by '+fmt(best.depart)+'.');
+  return{from,to,arrive,opts,best};
+}
+async function planDay(){
+  document.body.classList.add('spin');log=[];prev=results;results=[];
+  log.push('Checked '+ZONES.length+' closure zones'+(disrupt?' with the late-running update (roads +90 min, foot crossings +60 min)':'')+'.');
+  let from=HOME;const list=[...PLANS].sort((a,b)=>a.t-b.t);
+  for(const p of list){results.push(await planLeg(from,p,p.t));from=p}
+  document.body.classList.remove('spin');render();
+}
+function render(){
+  const conflicts=results.reduce((n,r)=>n+r.opts.filter(o=>o.hits.length||o.rerouted).length,0);
+  $('stats').innerHTML=`<div><b>${fmt(results[0].best.depart)}</b><span>first leave-by time</span></div><div><b>${results.length}</b><span>plans covered</span></div><div><b>${conflicts}</b><span>closure conflicts avoided</span></div>`;
+  $('day').innerHTML=`<li class="stop home"><div class="t">Start</div><div><div class="ttl">${esc(HOME.title)}</div><div class="place">${esc(HOME.place)}</div></div></li>`+results.map((r,i)=>{const b=r.best;
+    return `<li class="stop"><div class="t">${fmt(r.to.t)}<input type="time" data-i="${PLANS.indexOf(r.to)}" value="${toTime(r.to.t)}" aria-label="Time for ${esc(r.to.title)}"></div><div><div class="ttl">${esc(r.to.title)}</div><div class="place">${esc(r.to.place)}</div>
+    <div class="leg" id="leg${i}"><div><span class="leave">Leave by ${fmt(b.depart)}</span></div><div style="margin-top:4px"><span class="mode m-${b.mode}">${MODE[b.mode]}</span>${b.mins} min${b.crowd?' + '+b.crowd+' min crowd buffer':''} + 10 min spare${b.est?' · estimate':''}</div>
+    ${b.notes.map(n=>`<p class="note">${esc(n)}</p>`).join('')}${b.hits.length?`<p class="note bad">No clear option: still crosses ${esc(b.hits[0].name)}. Leave earlier or wait for reopening.</p>`:''}
+    <div class="alts">${r.opts.filter(o=>o!==b).map(o=>`<span class="alt ${o.hits.length?'x':''}">${MODE[o.mode]} ${o.mins} min${o.hits.length?' · blocked by '+esc(o.hits[0].name):o.rerouted?' · needs detour':''}</span>`).join('')}</div></div></div></li>`}).join('');
+  $('log').innerHTML=log.map(l=>`<li>${esc(l)}</li>`).join('');
+  showAlert();draw();
+}
+function showAlert(){
+  const a=$('alert');if(!prev||!prev.length||prev.length!==results.length){a.className='alert';return}
+  const ch=results.map((r,i)=>({r,p:prev[i],i})).filter(x=>x.p.best.mode!==x.r.best.mode||Math.abs(x.p.best.depart-x.r.best.depart)>=1);
+  if(!ch.length){a.className='alert';return}
+  const last=ch[ch.length-1],host=last.r.to.host,late=last.r.best.hits.length;
+  a.innerHTML=`<h3>${disrupt?'Parade running late: I re-planned your day':'Plan updated'}</h3>`+ch.map(x=>`<p class="note">${esc(x.r.to.title)}: ${MODE[x.p.best.mode]}, leave ${fmt(x.p.best.depart)} → <b>${MODE[x.r.best.mode]}, leave ${fmt(x.r.best.depart)}</b></p>`).join('')+
+   (host?`<p class="note">Drafted a heads-up for ${esc(host)}. It needs your OK:</p><div class="draft" id="draftTxt">Hi ${esc(host)}! Parade traffic is running late, so I'm taking the ${MODE[last.r.best.mode].toLowerCase()} and leaving at ${fmt(last.r.best.depart)}. ${late?'I may be a bit late.':'Still on track for '+fmt(last.r.to.t)+'.'} 🦃</div><div class="bar"><button id="okSend">Approve message</button><button class="ghost" id="noSend">Not now</button></div>`:'');
+  a.className='alert on';ch.forEach(x=>{const el=$('leg'+x.i);if(el){el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1600)}});
+  const ok=$('okSend'),no=$('noSend');
+  if(ok)ok.onclick=()=>{ok.parentElement.outerHTML='<p class="small">Approved. In a real build this would go through your messaging app. Nothing is sent in this demo.</p>'};
+  if(no)no.onclick=()=>{no.parentElement.outerHTML='<p class="small">Kept as a draft.</p>'};
+}
+/* ---------- maps ---------- */
+function draw(){live&&gmap?drawLive():drawSvg()}
+function drawSvg(){
+  const m=$('map');let s=m.querySelector('svg');if(!s){m.innerHTML='<svg role="img" aria-label="Schematic map of Midtown and the Upper West Side with parade closures and your routes"></svg>';s=m.querySelector('svg')}
+  const W=m.clientWidth,H=m.clientHeight,b={n:40.790,s:40.732,w:-74.004,e:-73.955};
+  const k=Math.min(W/((b.e-b.w)*COS),H/(b.n-b.s)),ox=(W-(b.e-b.w)*COS*k)/2,oy=(H-(b.n-b.s)*k)/2;
+  const P=p=>[(ox+(p[1]-b.w)*COS*k).toFixed(1),(oy+(b.n-p[0])*k).toFixed(1)];
+  const pts=a=>a.map(p=>P(p).join(',')).join(' ');const t=+$('clock').value;
+  const park=[[40.7681,-73.9819],[40.7644,-73.9730],[40.7905,-73.9545],[40.7960,-73.9690]];
+  let h=`<polygon points="${pts(park)}" fill="var(--park)"/><text x="${P([40.7800,-73.9660])[0]}" y="${P([40.7800,-73.9660])[1]}" font-size="12" fill="var(--mute)" text-anchor="middle">Central Park</text>`;
+  ZONES.forEach(z=>{const[s1,e1]=win(z,'DRIVING');const on=t>=s1&&t<e1;h+=`<polygon points="${pts(z.poly)}" fill="${on?'#e6261f':'#9aa6b2'}" fill-opacity="${on?.55:.3}"/>`});
+  h+=`<polyline points="${pts(ROUTE)}" fill="none" stroke="#e6261f" stroke-width="3" stroke-dasharray="8 5"/>`;
+  results.forEach(r=>{h+=`<polyline points="${pts(r.best.path)}" fill="none" stroke="${COL[r.best.mode]}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>`});
+  [HOME,...results.map(r=>r.to)].forEach((p,i)=>{const[x,y]=P(p.p);h+=`<circle cx="${x}" cy="${y}" r="11" fill="var(--bg)" stroke="var(--ink)" stroke-width="4"/><text x="${x}" y="${+y+4}" font-size="11" font-weight="800" text-anchor="middle" fill="var(--ink)">${i?i:'H'}</text>`});
+  [['6th Ave',[40.7560,-73.9840]],['7th Ave',[40.7545,-73.9905]],['CPW',[40.7760,-73.9800]]].forEach(([n,p])=>{const[x,y]=P(p);if(W>420)h+=`<text x="${x}" y="${y}" font-size="11" fill="var(--mute)">${n}</text>`});
+  s.innerHTML=h;
+}
+function drawLive(){
+  gshapes.forEach(s=>s.setMap(null));gshapes=[];const t=+$('clock').value,G=gm;
+  ZONES.forEach(z=>{const[s1,e1]=win(z,'DRIVING');const on=t>=s1&&t<e1;gshapes.push(new G.Polygon({map:gmap,paths:z.poly.map(p=>({lat:p[0],lng:p[1]})),fillColor:on?'#e6261f':'#9aa6b2',fillOpacity:on?.45:.25,strokeWeight:0}))});
+  gshapes.push(new G.Polyline({map:gmap,path:ROUTE.map(p=>({lat:p[0],lng:p[1]})),strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:'#e6261f',scale:3},offset:'0',repeat:'14px'}]}));
+  results.forEach(r=>gshapes.push(new G.Polyline({map:gmap,path:r.best.path.map(p=>({lat:p[0],lng:p[1]})),strokeColor:COL[r.best.mode],strokeWeight:6,strokeOpacity:.9})));
+  [HOME,...results.map(r=>r.to)].forEach(p=>gshapes.push(new G.Circle({map:gmap,center:{lat:p.p[0],lng:p.p[1]},radius:60,fillColor:'#111418',fillOpacity:1,strokeColor:'#fff',strokeWeight:3})));
+}
+function loadGoogle(key){return new Promise((res,rej)=>{
+  window.__gmReady=()=>res();const sc=document.createElement('script');
+  sc.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(key)+'&v=weekly&loading=async&libraries=geometry&callback=__gmReady';
+  sc.onerror=()=>rej(new Error('blocked'));document.head.appendChild(sc);setTimeout(()=>rej(new Error('timeout')),9000)})}
+window.gm_authFailure=()=>{live=false;$('modeBadge').textContent='Demo mode: key was refused';$('keyMsg').textContent='Google refused the key. Check that Maps JavaScript API and Routes API are enabled and this page\'s address is allowed.';$('map').innerHTML='';planDay()};
+$('golive').onclick=async()=>{
+  const key=$('key').value.trim();if(!key){$('keyMsg').textContent='Paste a key first.';return}
+  $('keyMsg').textContent='Connecting to Google Maps…';
+  try{await loadGoogle(key);gm=google.maps;const{Map}=await gm.importLibrary('maps');$('map').innerHTML='';
+    gmap=new Map($('map'),{center:{lat:40.7620,lng:-73.9800},zoom:13,disableDefaultUI:true,zoomControl:true});
+    live=true;$('modeBadge').textContent='Live mode: Google Routes';$('keyMsg').textContent='Live. Routes come from Google; the closure check is done by this agent.';prev=null;await planDay()}
+  catch(e){$('keyMsg').textContent='Could not load Google Maps here. A shared Claude page cannot reach Google\'s servers; open the downloaded file on your computer for live mode. Demo mode is still running.'}
+};
+$('disrupt').onclick=()=>{disrupt=!disrupt;$('disrupt').textContent=disrupt?'Clear disruption':'Simulate disruption: parade runs late';planDay()};
+$('replan').onclick=()=>{prev=null;planDay()};
+$('day').addEventListener('change',e=>{const i=e.target.dataset.i;if(i==null||!e.target.value)return;const[h,m]=e.target.value.split(':').map(Number);PLANS[i].t=h*60+m;planDay()});
+$('clock').oninput=()=>{$('clockOut').textContent=fmt(+$('clock').value);draw()};
+const ro=new ResizeObserver(()=>{if(!live)drawSvg()});ro.observe($('map'));
+planDay();
+}
+</script>
+</body>
+</html>
