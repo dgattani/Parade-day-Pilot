@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan My Day concept</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f1f2f4;color:#15181c;font:16px/1.5 Figtree,system-ui,sans-serif}
+header{padding:32px max(4vw,16px) 8px;max-width:1300px;margin:0 auto}
+h1.page{font-size:clamp(28px,4vw,42px);line-height:1.1;margin:0 0 8px}
+header p{margin:0 0 6px;color:#5b6470;max-width:70ch}
+.row{display:flex;flex-wrap:wrap;gap:40px;justify-content:center;padding:24px 16px 48px}
+figure{margin:0;display:flex;flex-direction:column;gap:12px;align-items:center;scroll-margin-top:16px}
+figcaption{font-weight:800;font-size:17px}
+.phone{width:390px;height:844px;border-radius:36px;overflow:hidden;box-shadow:0 0 0 10px #15181c,0 20px 40px rgba(0,0,0,.25);transform-origin:top center}
+@media(max-width:430px){.phone{transform:scale(.85);margin-bottom:-127px}}
+a:focus-visible,button:focus-visible{outline:3px solid #0a5cff;outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+<h1 class="page">Plan My Day: a map assistant for parade day</h1>
+<p>Concept mockup for a class workshop, not an official Google design. Sample person and plans; times match the working prototype's estimates. Closure times are based on the city's 2025 notices.</p>
+<p><a href="index.html">Open the working prototype →</a></p>
+</header>
+<main class="row">
+<figure id="tell"><figcaption>1 · Tell it your day</figcaption><div class="phone"><div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #eceee8; font-family: Figtree, system-ui, sans-serif; color: #15181c">
+<svg width="390" height="360" viewBox="0 0 390 360" role="img" aria-label="Map of Manhattan with parade closures and your stops" style="position: absolute; left: 0; top: 0">
+<rect width="390" height="360" fill="#eceee8"></rect>
+<path d="M0 0 H44 L0 170 Z" fill="#c9dcec"></path><path d="M390 110 L350 360 H390 Z" fill="#c9dcec"></path>
+<g stroke="#ffffff" stroke-width="5"><line x1="-60" y1="360" x2="44" y2="0"></line><line x1="0" y1="360" x2="104" y2="0"></line><line x1="60" y1="360" x2="164" y2="0"></line><line x1="120" y1="360" x2="224" y2="0"></line><line x1="180" y1="360" x2="284" y2="0"></line><line x1="240" y1="360" x2="344" y2="0"></line><line x1="300" y1="360" x2="404" y2="0"></line></g><g stroke="#ffffff" stroke-width="2"><line x1="0" y1="-40" x2="390" y2="73"></line><line x1="0" y1="10" x2="390" y2="123"></line><line x1="0" y1="60" x2="390" y2="173"></line><line x1="0" y1="110" x2="390" y2="223"></line><line x1="0" y1="160" x2="390" y2="273"></line><line x1="0" y1="210" x2="390" y2="323"></line><line x1="0" y1="260" x2="390" y2="373"></line></g>
+<g transform="translate(0 54)">
+<polygon points="150,45 232,26 300,128 218,147" fill="#c8e6c0"></polygon>
+<text x="226" y="90" font-size="11" fill="#3f6b39" text-anchor="middle">Central Park</text>
+<g stroke="#e6261f" stroke-opacity="0.45" stroke-width="12" stroke-linecap="round"><line x1="160" y1="60" x2="218" y2="147"></line><line x1="218" y1="147" x2="300" y2="128"></line><line x1="244" y1="141" x2="196" y2="310"></line></g>
+<path d="M178 87 L218 147 L244 141 L196 310 L172 303" fill="none" stroke="#b3261e" stroke-width="2.5" stroke-dasharray="6 4"></path>
+<circle cx="118" cy="70" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="118" y="74" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">H</text><circle cx="326" cy="206" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="326" y="210" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">1</text><circle cx="104" cy="226" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="104" y="230" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">2</text><circle cx="352" cy="160" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="352" y="164" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">3</text>
+</g></svg>
+<div style="position: absolute; left: 16px; right: 16px; top: 16px; height: 52px; background: #ffffff; border-radius: 26px; box-shadow: 0 2px 8px rgba(0,0,0,0.16); display: flex; align-items: center; gap: 12px; padding: 0 8px 0 18px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b6470" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+<span style="flex: 1; color: #5b6470; font-size: 16px">Search here</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b6470" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><line x1="12" y1="18" x2="12" y2="21"></line></svg>
+<div style="width: 36px; height: 36px; border-radius: 18px; background: #3f6b39; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px">M</div>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; top: 300px; bottom: 0; background: #ffffff; border-radius: 24px 24px 0 0; box-shadow: 0 -4px 16px rgba(0,0,0,0.12); padding: 10px 20px 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="width: 36px; height: 4px; border-radius: 2px; background: #c9ced4; align-self: center"></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font-size: 24px; line-height: 1.15; font-weight: 800">Plan my day</h1><p style="margin: 0; color: #5b6470; font-size: 14px">Thu, Nov 26 · Parade day in Manhattan</p></div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #5b6470">You said
+<textarea rows="3" style="font: inherit; font-size: 15px; font-weight: 400; color: #15181c; border: 1px solid #d5dae0; border-radius: 14px; padding: 10px 12px; resize: none; background: #f6f7f9">Volunteer at the food pantry on Lex and 51st at 9, pick up pies on 9th Ave and 44th by 12:30, then dinner at Sam's on 3rd Ave and 57th at 4.</textarea></label>
+<div><p style="margin: 0 0 2px; font-size: 13px; font-weight: 600; color: #5b6470">Here's what I understood</p>
+<div style="display: flex; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid #eceff2"><span style="width: 76px; flex: none; font-weight: 800; font-size: 15px; white-space: nowrap">Start</span><span style="font-size: 15px"><b>Home</b><br><span style="color: #5b6470">W 81st St & Amsterdam Ave</span></span></div><div style="display: flex; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid #eceff2"><span style="width: 76px; flex: none; font-weight: 800; font-size: 15px; white-space: nowrap">9:00 AM</span><span style="font-size: 15px"><b>Food pantry</b><br><span style="color: #5b6470">Lexington Ave & E 51st St</span></span></div><div style="display: flex; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid #eceff2"><span style="width: 76px; flex: none; font-weight: 800; font-size: 15px; white-space: nowrap">12:30 PM</span><span style="font-size: 15px"><b>Bakery: pick up pies</b><br><span style="color: #5b6470">9th Ave & W 44th St</span></span></div><div style="display: flex; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid #eceff2"><span style="width: 76px; flex: none; font-weight: 800; font-size: 15px; white-space: nowrap">4:00 PM</span><span style="font-size: 15px"><b>Dinner at Sam's</b><br><span style="color: #5b6470">3rd Ave & E 57th St</span></span></div></div>
+<a href="#plan" style="display: flex; align-items: center; justify-content: center; height: 52px; border-radius: 26px; background: #0a5cff; color: #ffffff; font-weight: 800; font-size: 16px; text-decoration: none; flex: none">Plan my day</a>
+<p style="margin: 0; font-size: 13px; color: #5b6470; text-align: center">Checks parade closures, subway changes and traffic for each stop.</p>
+</div>
+</div></div></figure>
+<figure id="plan"><figcaption>2 · Your planned day</figcaption><div class="phone"><div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #eceee8; font-family: Figtree, system-ui, sans-serif; color: #15181c">
+<svg width="390" height="360" viewBox="0 0 390 360" role="img" aria-label="Map of Manhattan with parade closures and your stops" style="position: absolute; left: 0; top: 0">
+<rect width="390" height="360" fill="#eceee8"></rect>
+<path d="M0 0 H44 L0 170 Z" fill="#c9dcec"></path><path d="M390 110 L350 360 H390 Z" fill="#c9dcec"></path>
+<g stroke="#ffffff" stroke-width="5"><line x1="-60" y1="360" x2="44" y2="0"></line><line x1="0" y1="360" x2="104" y2="0"></line><line x1="60" y1="360" x2="164" y2="0"></line><line x1="120" y1="360" x2="224" y2="0"></line><line x1="180" y1="360" x2="284" y2="0"></line><line x1="240" y1="360" x2="344" y2="0"></line><line x1="300" y1="360" x2="404" y2="0"></line></g><g stroke="#ffffff" stroke-width="2"><line x1="0" y1="-40" x2="390" y2="73"></line><line x1="0" y1="10" x2="390" y2="123"></line><line x1="0" y1="60" x2="390" y2="173"></line><line x1="0" y1="110" x2="390" y2="223"></line><line x1="0" y1="160" x2="390" y2="273"></line><line x1="0" y1="210" x2="390" y2="323"></line><line x1="0" y1="260" x2="390" y2="373"></line></g>
+<g transform="translate(0 54)">
+<polygon points="150,45 232,26 300,128 218,147" fill="#c8e6c0"></polygon>
+<text x="226" y="90" font-size="11" fill="#3f6b39" text-anchor="middle">Central Park</text>
+<g stroke="#e6261f" stroke-opacity="0.45" stroke-width="12" stroke-linecap="round"><line x1="160" y1="60" x2="218" y2="147"></line><line x1="218" y1="147" x2="300" y2="128"></line><line x1="244" y1="141" x2="196" y2="310"></line></g>
+<path d="M178 87 L218 147 L244 141 L196 310 L172 303" fill="none" stroke="#b3261e" stroke-width="2.5" stroke-dasharray="6 4"></path>
+<path d="M118 70 L150 190 L326 206" fill="none" stroke="#0a5cff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M326 206 L220 222 L104 226" fill="none" stroke="#0a5cff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M104 226 L240 176 L352 160" fill="none" stroke="#f29d00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="118" cy="70" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="118" y="74" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">H</text><circle cx="326" cy="206" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="326" y="210" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">1</text><circle cx="104" cy="226" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="104" y="230" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">2</text><circle cx="352" cy="160" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="352" y="164" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">3</text>
+</g></svg>
+<div style="position: absolute; left: 16px; right: 16px; top: 16px; height: 52px; background: #ffffff; border-radius: 26px; box-shadow: 0 2px 8px rgba(0,0,0,0.16); display: flex; align-items: center; gap: 12px; padding: 0 8px 0 18px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b6470" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+<span style="flex: 1; color: #5b6470; font-size: 16px">Search here</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b6470" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><line x1="12" y1="18" x2="12" y2="21"></line></svg>
+<div style="width: 36px; height: 36px; border-radius: 18px; background: #3f6b39; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px">M</div>
+</div>
+<div style="position: absolute; left: 16px; top: 78px; height: 34px; padding: 0 14px; border-radius: 17px; background: #ffffff; border: 2px solid #e6261f; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.12)"><span style="width: 10px; height: 10px; border-radius: 5px; background: #e6261f"></span>Parade closures on your routes until 3 PM</div>
+<div style="position: absolute; left: 0; right: 0; top: 300px; bottom: 0; background: #ffffff; border-radius: 24px 24px 0 0; box-shadow: 0 -4px 16px rgba(0,0,0,0.12); padding: 10px 20px 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="width: 36px; height: 4px; border-radius: 2px; background: #c9ced4; align-self: center"></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font-size: 24px; line-height: 1.15; font-weight: 800">Your day is planned</h1><p style="margin: 0; color: #5b6470; font-size: 14px">3 stops · 4 closure conflicts avoided · I'll alert you if anything changes</p></div>
+<div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid #e3e7ec; border-radius: 16px">
+<div style="width: 72px; flex: none"><span style="display: block; font-size: 12px; color: #5b6470">Leave by</span><span style="display: block; font-size: 17px; font-weight: 800; line-height: 1.15; white-space: nowrap">8:21 AM</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 800; font-size: 15px">Food pantry <span style="font-weight: 400; color: #5b6470">· 9:00 AM</span></span>
+<span style="font-size: 14px"><span style="background: #0a5cff; color: #ffffff; font-weight: 700; font-size: 12px; border-radius: 6px; padding: 2px 7px">Subway</span> 21 min + 8 min crowd buffer</span>
+<span style="font-size: 13px; color: #5b6470; line-height: 1.35">A taxi would hit the Central Park West closure. The subway runs under it.</span></div>
+<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;origin=40.784,-73.978&amp;destination=40.7569,-73.9715&amp;travelmode=transit" aria-label="Directions to Food pantry" style="width: 44px; height: 44px; flex: none; border-radius: 22px; background: #0a5cff; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8z"></path></svg></a></div>
+<div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid #e3e7ec; border-radius: 16px">
+<div style="width: 72px; flex: none"><span style="display: block; font-size: 12px; color: #5b6470">Leave by</span><span style="display: block; font-size: 17px; font-weight: 800; line-height: 1.15; white-space: nowrap">11:55 AM</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 800; font-size: 15px">Bakery <span style="font-weight: 400; color: #5b6470">· 12:30 PM</span></span>
+<span style="font-size: 14px"><span style="background: #0a5cff; color: #ffffff; font-weight: 700; font-size: 12px; border-radius: 6px; padding: 2px 7px">Subway</span> 17 min + 8 min buffer</span>
+<span style="font-size: 13px; color: #5b6470; line-height: 1.35">Walking is blocked: you can't cross 6th Ave until the parade passes.</span></div>
+<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;origin=40.7569,-73.9715&amp;destination=40.7603,-73.9919&amp;travelmode=transit" aria-label="Directions to Bakery" style="width: 44px; height: 44px; flex: none; border-radius: 22px; background: #0a5cff; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8z"></path></svg></a></div>
+<div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid #e3e7ec; border-radius: 16px">
+<div style="width: 72px; flex: none"><span style="display: block; font-size: 12px; color: #5b6470">Leave by</span><span style="display: block; font-size: 17px; font-weight: 800; line-height: 1.15; white-space: nowrap">3:34 PM</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 800; font-size: 15px">Sam's <span style="font-weight: 400; color: #5b6470">· 4:00 PM</span></span>
+<span style="font-size: 14px"><span style="background: #f29d00; color: #15181c; font-weight: 700; font-size: 12px; border-radius: 6px; padding: 2px 7px">Taxi</span> 16 min</span>
+<span style="font-size: 13px; color: #5b6470; line-height: 1.35">6th Ave reopens about 3 PM, so the direct route is clear.</span></div>
+<a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&amp;origin=40.7603,-73.9919&amp;destination=40.7605,-73.9665&amp;travelmode=driving" aria-label="Directions to Sam's" style="width: 44px; height: 44px; flex: none; border-radius: 22px; background: #0a5cff; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8z"></path></svg></a></div>
+<a href="#late" style="font-weight: 700; font-size: 15px; text-decoration: none; min-height: 44px; display: flex; align-items: center; justify-content: center">Preview: what if the parade runs late?</a>
+</div>
+</div></div></figure>
+<figure id="late"><figcaption>3 · Parade runs late: re-plan</figcaption><div class="phone"><div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #eceee8; font-family: Figtree, system-ui, sans-serif; color: #15181c">
+<svg width="390" height="360" viewBox="0 0 390 360" role="img" aria-label="Map of Manhattan with parade closures and your stops" style="position: absolute; left: 0; top: 0">
+<rect width="390" height="360" fill="#eceee8"></rect>
+<path d="M0 0 H44 L0 170 Z" fill="#c9dcec"></path><path d="M390 110 L350 360 H390 Z" fill="#c9dcec"></path>
+<g stroke="#ffffff" stroke-width="5"><line x1="-60" y1="360" x2="44" y2="0"></line><line x1="0" y1="360" x2="104" y2="0"></line><line x1="60" y1="360" x2="164" y2="0"></line><line x1="120" y1="360" x2="224" y2="0"></line><line x1="180" y1="360" x2="284" y2="0"></line><line x1="240" y1="360" x2="344" y2="0"></line><line x1="300" y1="360" x2="404" y2="0"></line></g><g stroke="#ffffff" stroke-width="2"><line x1="0" y1="-40" x2="390" y2="73"></line><line x1="0" y1="10" x2="390" y2="123"></line><line x1="0" y1="60" x2="390" y2="173"></line><line x1="0" y1="110" x2="390" y2="223"></line><line x1="0" y1="160" x2="390" y2="273"></line><line x1="0" y1="210" x2="390" y2="323"></line><line x1="0" y1="260" x2="390" y2="373"></line></g>
+<g transform="translate(0 54)">
+<polygon points="150,45 232,26 300,128 218,147" fill="#c8e6c0"></polygon>
+<text x="226" y="90" font-size="11" fill="#3f6b39" text-anchor="middle">Central Park</text>
+<g stroke="#e6261f" stroke-opacity="0.45" stroke-width="12" stroke-linecap="round"><line x1="160" y1="60" x2="218" y2="147"></line><line x1="218" y1="147" x2="300" y2="128"></line><line x1="244" y1="141" x2="196" y2="310"></line></g>
+<path d="M178 87 L218 147 L244 141 L196 310 L172 303" fill="none" stroke="#b3261e" stroke-width="2.5" stroke-dasharray="6 4"></path>
+<path d="M118 70 L150 190 L326 206" fill="none" stroke="#0a5cff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M326 206 L220 222 L104 226" fill="none" stroke="#0a5cff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M104 226 L240 176 L352 160" fill="none" stroke="#0a5cff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path><rect x="140" y="250" width="112" height="22" rx="11" fill="#e6261f"></rect><text x="196" y="265" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">6th Ave closed to 4:30</text><circle cx="118" cy="70" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="118" y="74" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">H</text><circle cx="326" cy="206" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="326" y="210" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">1</text><circle cx="104" cy="226" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="104" y="230" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">2</text><circle cx="352" cy="160" r="12" fill="#ffffff" stroke="#15181c" stroke-width="3"></circle><text x="352" y="164" font-size="11" font-weight="800" text-anchor="middle" fill="#15181c">3</text>
+</g></svg>
+<div style="position: absolute; left: 16px; right: 16px; top: 16px; height: 52px; background: #ffffff; border-radius: 26px; box-shadow: 0 2px 8px rgba(0,0,0,0.16); display: flex; align-items: center; gap: 12px; padding: 0 8px 0 18px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b6470" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>
+<span style="flex: 1; color: #5b6470; font-size: 16px">Search here</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b6470" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><line x1="12" y1="18" x2="12" y2="21"></line></svg>
+<div style="width: 36px; height: 36px; border-radius: 18px; background: #3f6b39; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px">M</div>
+</div>
+<div role="status" style="position: absolute; left: 16px; right: 16px; top: 78px; padding: 12px 14px; border-radius: 16px; background: #15181c; color: #ffffff; display: flex; gap: 12px; align-items: flex-start; box-shadow: 0 4px 12px rgba(0,0,0,0.25)">
+<span style="width: 28px; height: 28px; flex: none; border-radius: 14px; background: #e6261f; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="6" x2="12" y2="13"></line><line x1="12" y1="18" x2="12" y2="18.5"></line></svg></span>
+<span style="font-size: 14px; line-height: 1.35"><b>Parade running late</b><br>NYPD is keeping 6th Ave closed until about 4:30 PM.</span></div>
+<div style="position: absolute; left: 0; right: 0; top: 300px; bottom: 0; background: #ffffff; border-radius: 24px 24px 0 0; box-shadow: 0 -4px 16px rgba(0,0,0,0.12); padding: 10px 20px 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="width: 36px; height: 4px; border-radius: 2px; background: #c9ced4; align-self: center"></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><h1 style="margin: 0; font-size: 24px; line-height: 1.15; font-weight: 800">I changed your dinner trip</h1><p style="margin: 0; color: #5b6470; font-size: 14px">Your taxi to Sam's would get stuck at 6th Ave.</p></div>
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 16px; background: #f6f7f9">
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 15px; color: #5b6470"><span style="text-decoration: line-through">Taxi · leave 3:34 PM</span><span>was</span></div>
+<div style="display: flex; justify-content: space-between; gap: 8px; font-size: 17px; font-weight: 800"><span><span style="background: #0a5cff; color: #ffffff; font-size: 12px; border-radius: 6px; padding: 2px 7px; vertical-align: 2px">Subway</span> Leave 3:32 PM</span><span>18 min</span></div>
+<p style="margin: 0; font-size: 14px; color: #3f6b39; font-weight: 700">Still on time for 4:00 PM at Sam's.</p></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><p style="margin: 0; font-size: 13px; font-weight: 600; color: #5b6470">Message to Sam · needs your OK</p>
+<p style="margin: 0; padding: 12px; border: 1px solid #d5dae0; border-radius: 14px; font-size: 15px; line-height: 1.4">Hi Sam! Parade traffic is running late, so I'm taking the subway and leaving at 3:32. Still on track for 4:00.</p></div>
+<div style="display: flex; gap: 10px"><button type="button" style="flex: 1; height: 48px; border: 0; border-radius: 24px; background: #0a5cff; color: #ffffff; font: inherit; font-weight: 800; font-size: 16px">Send to Sam</button><button type="button" style="height: 48px; padding: 0 20px; border: 1px solid #d5dae0; border-radius: 24px; background: #ffffff; color: #15181c; font: inherit; font-weight: 600; font-size: 16px">Edit</button></div>
+<p style="margin: 0; font-size: 13px; color: #5b6470; text-align: center">Nothing is sent without your tap.</p>
+<a href="#plan" style="font-weight: 700; font-size: 15px; text-decoration: none; min-height: 44px; display: flex; align-items: center; justify-content: center">Back to my day</a>
+</div>
+</div></div></figure>
+</main>
+</body>
+</html>
